@@ -12,15 +12,15 @@ var svg = d3
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("../data/data.csv").then(function(stateData){
-    stateData.forEach(function(data){
-        data.income = +data.income;
-        data.smokes = +data.smokes; //check to see if okay to have multiples included in forEach
-    })
-})
-var x = d3.scaleLinear()
-    .domain([0, 25]) //update upper limit
-    .range([0, width]);
-var y = d3.scaleLinear()
-    .domain([0,30]) //update upper limit
-    .range([height,0]);
+d3.csv("/assets/data/data.csv")//.then(function(stateData){
+//     stateData.forEach(function(data){
+//         data.income = +data.income;
+//         data.smokes = +data.smokes; //check to see if okay to have multiples included in forEach
+//     })
+// })
+// var x = d3.scaleLinear()
+//     .domain([0, 25]) //update upper limit
+//     .range([0, width]);
+// var y = d3.scaleLinear()
+//     .domain([0,30]) //update upper limit
+//     .range([height,0]);
