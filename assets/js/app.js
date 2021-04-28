@@ -31,20 +31,49 @@ d3.csv("/assets/data/data.csv").then(function (stateData) {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
     var y = d3.scaleLinear()
-        .domain([d3.min(stateData, data => data.obesity), d3.max(stateData, data => data.obesity)]) //update upper limit
+        .domain([(d3.min(stateData, data => data.obesity) - 2), (d3.max(stateData, data => data.obesity) + 2)]) //update upper limit
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y));
 
-    svg.append("g")
-        .selectAll("dot")
+    // svg.append("g")
+    //     .selectAll("dot")
+    //     .data(stateData)
+    //     .enter()
+    //     .append("circle")
+    //     .attr("cx", function (d) { return x(d.poverty); })
+    //     .attr("cy", function (d) { return y(d.obesity); })
+    //     .attr("r", 5)
+    //     .attr("stroke", "steelblue")
+    //     .style("fill", "none");
+    var gdots = svg.selectAll("g.dot")
         .data(stateData)
-        .enter()
-        .append("circle")
+        .enter().append('g');
+
+    gdots.append("circle")
+        .attr("class", "dot")
+        .attr("r", 15)
         .attr("cx", function (d) { return x(d.poverty); })
         .attr("cy", function (d) { return y(d.obesity); })
-        .attr("r", 1.5)
-        .style("fill", "#69b3a2")
+        .style("fill", "steelblue");
+
+    gdots.append("text").text(function (d) { return d.abbr; })
+        .attr("x", (function (d) { return x(d.poverty) } ))
+        .attr("y", function (d) { return y(d.obesity); })
+        .attr("font-size", 10);
+
+
+    // svg.append("g")
+    //     .attr("font-family", "sans-serif")
+    //     .attr("font-size", 6)
+    //     .selectAll("text")
+    //     .data(stateData)
+    //     .join("text")
+    //     .attr("dy", "0.35em")
+    //     .attr("x", d => x(d.x))
+    //     .attr("y", d => y(d.y))
+    //     .text(d => d.state);
+
 })
 
 //code based on http://www.d3noob.org/2012/12/adding-axis-labels-to-d3js-graph.html
@@ -57,7 +86,7 @@ svg.append("text")      // text label for the x axis
 svg.append("text")  //text label for the y axis
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
-    .attr("x",0 - (height / 2))
+    .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .text("Obesity");
