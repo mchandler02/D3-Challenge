@@ -5,6 +5,7 @@ var svgHeight = 500;
 var margin = { top: 10, right: 30, bottom: 50, left: 60 };
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
+console.log(width);
 
 var svg = d3
     .select("#scatter")
@@ -24,12 +25,13 @@ d3.csv("/assets/data/data.csv").then(function (stateData) {
 
     var x = d3.scaleLinear()
         .domain([0, 25]) //update upper limit
+        //d3.max(stateData, data => data.poverty)
         .range([0, width]);
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
     var y = d3.scaleLinear()
-        .domain([0, 30]) //update upper limit
+        .domain([d3.min(stateData, data => data.obesity), d3.max(stateData, data => data.obesity)]) //update upper limit
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y));
