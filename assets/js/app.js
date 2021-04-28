@@ -12,15 +12,33 @@ var svg = d3
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("/assets/data/data.csv")//.then(function(stateData){
-//     stateData.forEach(function(data){
-//         data.income = +data.income;
-//         data.smokes = +data.smokes; //check to see if okay to have multiples included in forEach
-//     })
-// })
-// var x = d3.scaleLinear()
-//     .domain([0, 25]) //update upper limit
-//     .range([0, width]);
-// var y = d3.scaleLinear()
-//     .domain([0,30]) //update upper limit
-//     .range([height,0]);
+d3.csv("/assets/data/data.csv").then(function(stateData){
+    stateData.forEach(function(data){
+        data.income = +data.income;
+        // console.log(data.income);
+        data.smokes = +data.smokes;
+        // console.log(data.smokes);
+    })
+
+var x = d3.scaleLinear()
+    .domain([0, 25]) //update upper limit
+    .range([0, width]);
+svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+var y = d3.scaleLinear()
+    .domain([0,30]) //update upper limit
+    .range([height,0]);
+svg.append("g")
+    .call(d3.axisLeft(y));
+
+svg.append("g")
+    .selectAll("dot")
+    .data(stateData)
+    .enter()
+    .append("circle")
+        .attr("cx", function(d) {return x(d.poverty);})
+        .attr("cy", function(d) {return y(d.obesity);})
+        .attr("r", 1.5)
+        .style("fill", "#69b3a2")
+})
