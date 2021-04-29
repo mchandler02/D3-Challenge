@@ -5,7 +5,7 @@ var svgHeight = 500;
 var margin = { top: 10, right: 30, bottom: 50, left: 60 };
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
-console.log(width);
+// console.log(width);
 
 var svg = d3
     .select("#scatter")
@@ -17,15 +17,14 @@ var svg = d3
 
 d3.csv("/assets/data/data.csv").then(function (stateData) {
     stateData.forEach(function (data) {
-        data.income = +data.income;
+        data.income = +data.poverty;
         // console.log(data.income);
-        data.smokes = +data.smokes;
+        data.smokes = +data.obesity;
         // console.log(data.smokes);
     })
 
     var x = d3.scaleLinear()
-        .domain([0, 25]) //update upper limit
-        //d3.max(stateData, data => data.poverty)
+        .domain([(d3.min(stateData, data => data.poverty) - 2), (d3.max(stateData, data => data.poverty) + 2)])
         .range([0, width]);
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
@@ -52,7 +51,8 @@ d3.csv("/assets/data/data.csv").then(function (stateData) {
         .attr("x", (function (d) { return x(d.poverty) } ))
         .attr("y", function (d) { return y(d.obesity); })
         .attr("font-size", 10)
-        .style('fill', 'white');
+        .style('fill', 'white')
+        .style("text-anchor", "middle");
 })
 
 //code based on http://www.d3noob.org/2012/12/adding-axis-labels-to-d3js-graph.html
